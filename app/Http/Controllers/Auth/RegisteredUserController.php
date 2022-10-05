@@ -44,8 +44,10 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]));
-        $user->attachRole('user');
+        $user->attachRole($request->role_id); 
+        //itt a regisztráció során az id-t használva a(z)db-ből ki lehet olvasni az adott ffelhasználót hogy user/editer
         // használható az id-je is a db-ből 2-es a webmester
+        //pl a db-ben az editer 2-s id-kapott ezért a role_user-ben is 2-s lesz az id-je
         event(new Registered($user));
 
         Auth::login($user);
