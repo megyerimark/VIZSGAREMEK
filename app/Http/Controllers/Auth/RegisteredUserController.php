@@ -39,12 +39,13 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $user = User::create([
+        Auth::login($user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-        ]);
-
+        ]));
+        $user->attachRole('user');
+        // használható az id-je is a db-ből 2-es a webmester
         event(new Registered($user));
 
         Auth::login($user);
